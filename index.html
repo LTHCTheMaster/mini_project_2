@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="index.html" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/icon.png">
+    <title>Cryptage Avec Python</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <!-- Prism.js -->
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/themes/prism.css" rel="stylesheet"/>
+
+    <!--This Project : Style.css -->
+    <link href="style.css" rel="stylesheet" type="text/css" >
+    
+</head>
+<body>
+    <div clas="container">
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+            <div class="col-lg-6 col-md-6 col-xs-8">
+                <h1 id="open_py">micro-logiciel de cryptage avec Python</h1>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+            <div class="col-lg-6 col-md-6 col-xs-8">
+                <h2 id="go_end"><br>Présentation du projet:</h2>
+                <p>Réaliser un logiciel qui permet de crypter ou de décrypter un texte par substitution mono-alphabétique. </p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+            <div class="col-lg-6 col-md-6 col-xs-8">
+                <h2>Mini cahier des charges:</h2>
+                <p>Réaliser un programme permettant :</p>
+                <ul>
+                    <li>De crypter un texte à partir d'une clé fournie par l'utilisateur ;</li>
+                    <li>De décrypter un texte à partir d'une clé fournie par l'utilisateur ;</li>
+                    <li>De décrypter un texte sans connaitre la clé</li>
+                </ul>
+                <p>Le micro-logiciel possède une interface graphique très simple <br> Voici un screen de l'interface:</p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+            <div class="col-lg-6 col-md-6 col-xs-8">
+                <img src="img/screen.png" class="img-fluid" alt="Un screen">
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+            <div class="col-lg-6 col-md-6 col-xs-8">
+                <br>
+                <h2><br>La partie "Cryptage-Décryptage":</h2>
+                <p>Première étape: le cryptage <br></p>
+                <pre><code class="language-python">
+                def crypto(chaine: str, cle: int) -> str:
+                    #Sécurité
+                    cle = abs(cle) % 26
+                    #Alphabet plus position conversion de A
+                    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    posA = abs(cle)
+                    #Output var
+                    out = ""
+                    #Bouclage de conversion
+                    for i in chaine:
+                        pre = 0
+                        pos = 0
+                        for j in range(26):
+                            if i == alphabet[j]:
+                                pre = 1
+                                pos = j
+                        if pre == 1:
+                            out += alphabet[(posA + pos)%26]
+                        else:
+                            out += i
+                    return out
+                </code></pre>
+                <br>
+                <p>Deuxième étape: le décryptage avec la clé connue<br></p>
+                <pre><code class="language-python">
+                    def decrypto(chaine: str, cle: int) -> str:
+                        #Sécurité
+                        cle = abs(cle) % 26
+                        #Alphabet plus position conversion de A
+                        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        posA = abs(26 - cle)
+                        #Output var
+                        out = ""
+                        #Bouclage de conversion
+                        for i in chaine:
+                        pre = 0
+                        pos = 0
+                        for j in range(26):
+                            if i == alphabet[j]:
+                                pre = 1
+                                pos = j
+                            if pre == 1:
+                                out += alphabet[(posA + pos)%26]
+                            else:
+                                out += i
+                        return out
+                </code></pre>
+                <br>
+                <p>Dernière partie: le décryptage avec clé inconnue <br>Petit rappel: une interface graphique a été implémenté d'où la présence d'instruction de TKinter</p>
+                <pre><code class="language-python">
+                    def decrypto_brute(chaine: str) -> str:
+                        index = 1
+                        status = True
+                        while status and index < 27:
+                            Ans = decrypto(chaine, index)
+                            crypto_out3.delete(0,END)
+                            crypto_out3.insert(0,Ans)
+                            tkinter.messagebox.showinfo(title="Decrypto Brute",message="Essai avec une clé de "+str(index)+"\n"+Ans)
+                            changer = tkinter.messagebox.askyesno(message="\nSi vous visualisez le texte en clair cliquer 'yes'/'oui' sinon 'no'/'non'\n")
+                            if changer:
+                                status = False
+                            else:
+                                index += 1
+                        if status:
+                            crypto_out3.delete(0,END)
+                            tkinter.messagebox.showinfo(message="\nDésolé, vous avez essayé toutes les valeurs de clé, le texte a été crypté selon une méthode non mono-alphabétique")
+                </code></pre>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+            <div class="col-lg-6 col-md-6 col-xs-8">
+                <br>
+                <h2>Les quelques problèmes rencontrés</h2>
+                <p>J'ai rencontré un problème majeur avec TKinter, étant donné que je ne l'ai quasiment jamais utilisé, et, c'est là que j'ai trouvé un lien intérresant pour en apprendre les bases: <a class="a_base" href="http://tkinter.fdex.eu/doc/intro.html">http://tkinter.fdex.eu/doc/intro.html</a> <br> <br> 
+                    Le second problème rencontré était la difficulté de faire une belle interface, ce qui m'a fait me rabattre sur une interface basique où tout se place dans l'ordre d'apparition dans le code.
+                    <br> <br> <br> Voici un lien vers le programme entier: <a class="a_base" href="files/crypto.py">crypto.py</a> <a class="a_pub" href="files/surprise/espace_pub.html">.</a> <a class="google_translated" href="files/surprise/google_translated_page.html">'</a>
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-2"></div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+    <!-- Prism.js -->
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/components/prism-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <!--This Project : Sys_over.js -->
+    <script src="sys_over.js"></script>
+</body>
+</html>

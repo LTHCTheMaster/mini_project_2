@@ -1,0 +1,15 @@
+body {
+    background-color: rgb(255, 128, 64);
+}
+
+h1 {
+    color: indigo;
+}
+
+p {
+    color: indigo,
+}
+
+a {
+    color: rgb(0, 0, 255);
+}
